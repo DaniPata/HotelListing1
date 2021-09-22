@@ -1,7 +1,9 @@
+using HotelListing___ASP_.NET.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,7 +29,12 @@ namespace HotelListing___ASP_.NET
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddDbContext<DatabaseContext>(options =>
+
+                    options.UseSqlServer(Configuration.GetConnectionString("sqlConnection"))
+
+            );
+
             services.AddCors(options =>
                      {
 
@@ -44,7 +51,9 @@ namespace HotelListing___ASP_.NET
              });
 
 
-                   
+            
+            services.AddControllers();
+       
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HotelListing___ASP_.NET", Version = "v1" });
