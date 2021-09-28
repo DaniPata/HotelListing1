@@ -14,6 +14,7 @@ namespace HotelListing___ASP_.NET.Data
 
         public string ShortName { get; set; }
 
+        public virtual IList<Hotel>Hotels { get; set; }
 
     }
 }

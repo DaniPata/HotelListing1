@@ -17,7 +17,7 @@ namespace HotelListing___ASP_.NET
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.File(
                 path: "c:\\hotellistings\\logs\\log-.txt",
-                outputTemplate: "{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
+                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj}{NewLine}{Exception}",
                 rollingInterval: RollingInterval.Day,
                 restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information
                 ).CreateLogger();
@@ -38,7 +38,7 @@ namespace HotelListing___ASP_.NET
                 Log.CloseAndFlush();
             }
 
-            CreateHostBuilder(args).Build().Run();
+        
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

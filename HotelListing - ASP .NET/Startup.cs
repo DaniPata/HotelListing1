@@ -1,4 +1,7 @@
+using HotelListing___ASP_.NET.Configurations;
 using HotelListing___ASP_.NET.Data;
+using HotelListing___ASP_.NET.IRepository;
+using HotelListing___ASP_.NET.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -51,8 +54,9 @@ namespace HotelListing___ASP_.NET
              });
 
 
-            
-            services.AddControllers();
+            services.AddAutoMapper(typeof(MapperInitializer));
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddControllers().AddNewtonsoftJson(op => op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
        
             services.AddSwaggerGen(c =>
             {
@@ -80,6 +84,7 @@ namespace HotelListing___ASP_.NET
 
             app.UseEndpoints(endpoints =>
             {
+               
                 endpoints.MapControllers();
             });
         }
