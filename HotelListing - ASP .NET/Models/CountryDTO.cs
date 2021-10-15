@@ -21,12 +21,17 @@ namespace HotelListing___ASP_.NET.Models
 
 
     }
+    public class UpdateCountryDTO: CreateCountryDTO
+    {
+        public IList<CreateHotelDTO> Hotels { get; set; }
+    }
+
     public class CountryDTO:CreateCountryDTO
     {
 
         public int Id { get; set; }
 
-       
+       public IList<HotelDTO> Hotels { get; set; }
 
 
     }

@@ -2,9 +2,11 @@ using HotelListing___ASP_.NET.Configurations;
 using HotelListing___ASP_.NET.Data;
 using HotelListing___ASP_.NET.IRepository;
 using HotelListing___ASP_.NET.Repository;
+using HotelListing___ASP_.NET.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +40,10 @@ namespace HotelListing___ASP_.NET
 
             );
 
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
+     
             services.AddCors(options =>
                      {
 
@@ -56,6 +62,7 @@ namespace HotelListing___ASP_.NET
 
             services.AddAutoMapper(typeof(MapperInitializer));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAuthManager, AuthManager>();
             services.AddControllers().AddNewtonsoftJson(op => op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
        
             services.AddSwaggerGen(c =>
@@ -80,6 +87,7 @@ namespace HotelListing___ASP_.NET
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
