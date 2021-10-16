@@ -1,8 +1,10 @@
-﻿using System;
+﻿using HotelListing___ASP_.NET.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace HotelListing___ASP_.NET.IRepository
 {
@@ -14,6 +16,8 @@ namespace HotelListing___ASP_.NET.IRepository
             List<string> includes = null
             );
 
+
+        Task<IPagedList<T>> GetAll(RequestParams requestParams, List<string> includes = null);
         Task<T> Get(Expression<Func<T, bool>> expression = null, List<string> includes = null);
 
         Task Insert(T entity);

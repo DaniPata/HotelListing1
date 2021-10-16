@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using HotelListing___ASP_.NET.Configurations;
 using HotelListing___ASP_.NET.Data;
 using HotelListing___ASP_.NET.IRepository;
@@ -40,6 +41,10 @@ namespace HotelListing___ASP_.NET
 
             );
 
+            services.AddMemoryCache();
+            services.ConfigureRateLimiting();
+            services.AddHttpContextAccessor();
+            services.ConfigureHttpCacheHeaders();
             services.AddAuthentication();
             services.ConfigureIdentity();
             services.ConfigureJWT(Configuration);
@@ -63,8 +68,20 @@ namespace HotelListing___ASP_.NET
             services.AddAutoMapper(typeof(MapperInitializer));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthManager, AuthManager>();
-            services.AddControllers().AddNewtonsoftJson(op => op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-       
+            services.AddControllers(config => {
+
+                config.CacheProfiles.Add("120SecondsDuration", new CacheProfile
+                {
+
+                    Duration = 120
+
+                });
+
+            
+            }).AddNewtonsoftJson(op => op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddResponseCaching();
+            services.ConfigureVersioning();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HotelListing___ASP_.NET", Version = "v1" });
@@ -81,10 +98,15 @@ namespace HotelListing___ASP_.NET
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HotelListing___ASP_.NET v1"));
             }
 
+            app.ConfigureExceptionHandler();
+
             app.UseHttpsRedirection();
 
             app.UseCors("AllowAll");
 
+            app.UseResponseCaching();
+            app.UseHttpCacheHeaders();
+            app.UseIpRateLimiting();
             app.UseRouting();
 
             app.UseAuthentication();
